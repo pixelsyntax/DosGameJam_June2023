@@ -1,4 +1,9 @@
+#include <string.h>
 #include "gfx.h"
+
+void gfx_clear(){
+	memset( screen, 0, SCREEN_WIDTH*SCREEN_HEIGHT );
+}
 
 void gfx_line( uint x1, uint y1, uint x2, uint y2, byte colour ){
 
