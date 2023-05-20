@@ -10,7 +10,7 @@ Raycaster FPS
 [*] 002 Testable
 
 001 Raycaster third person top down
-[ ] 000 Lines on screen
+[*] 000 Lines on screen
 [ ] 001 Movable, rotatable camera cursor
 [ ] 002 Test map data
 [ ] 003 Render map as lines
