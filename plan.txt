@@ -1,0 +1,9 @@
+DOSGAMEJAM JUNE2023 x KAJAM 
+
+DGJ is themeless, but is running at the same time as 13th KAJAM
+
+Ideas
+	Mecha raycaster fps, fight through a city and descend elevators!
+	Play by mail turn based strategy!
+	Text adventure!
+ 	Don't.	
