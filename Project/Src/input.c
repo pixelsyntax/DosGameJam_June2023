@@ -12,13 +12,22 @@
 #define PORT_KEYBOARD_CONTROL	0x61
 #define PORT_PIC 		0x20
 
+#define KEYCODE_W 		17
+#define KEYCODE_A 		30
+#define KEYCODE_S 		31
+#define KEYCODE_D 		32
+#define KEYCODE_UP 		72
+#define KEYCODE_LEFT 		75
+#define KEYCODE_RIGHT 		77
+#define KEYCODE_DOWN 		80
+
 //Keyboard handler
 _go32_dpmi_seginfo old_isr, keyboard_isr;
 
 byte input_keyboard_state[128];
 int input_last_code;
 
-int input[input_count];
+int inputs[input_count];
 
 void input_keyboard_isr(){
 	//Get key event
@@ -64,10 +73,23 @@ void input_uninstall_keyboard(){
 void input_init(){
 	input_install_keyboard();
 	for ( int i = 0; i < input_count; ++i ){
-		input[i] = INPUT_INACTIVE;
+		inputs[i] = INPUT_INACTIVE;
+	}
+}
+
+//Update an individual input 
+void input_update_input( INPUTS input, byte isActive ){
+	int value = inputs[input];
+	if ( value >= INPUT_ACTIVE ){
+		inputs[input] = isActive ? value + 1 : INPUT_DEACTIVATING;
+	} else {
+		inputs[input] = isActive ? INPUT_ACTIVE : INPUT_INACTIVE;
 	}
 }
 
 void input_update(){
-	input[input_forward] = input_keyboard_state[17];	
+	input_update_input( input_forward, input_keyboard_state[KEYCODE_W] | input_keyboard_state[KEYCODE_UP] );
+	input_update_input( input_backward, input_keyboard_state[KEYCODE_S] | input_keyboard_state[KEYCODE_DOWN] );
+	input_update_input( input_left, input_keyboard_state[KEYCODE_A] | input_keyboard_state[KEYCODE_LEFT] );
+	input_update_input( input_right, input_keyboard_state[KEYCODE_D] | input_keyboard_state[KEYCODE_RIGHT] );
 }

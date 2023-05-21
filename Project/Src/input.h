@@ -16,7 +16,7 @@ typedef enum INPUTS {
 	input_count
 } INPUTS;
 
-extern int input[input_count];
+extern int inputs[input_count];
 
 void input_init();   //Initial setup
 void input_update(); //Poll inputs

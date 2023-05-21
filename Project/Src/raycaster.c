@@ -79,7 +79,7 @@ void raycaster_draw_topdown(){
 
 void raycaster_update(){
 	//Read input and update camera position	
-	if ( input[input_forward] ){
+	if ( inputs[input_forward] == 1 ){
 		camera.x += 1;
 	}	
 }
