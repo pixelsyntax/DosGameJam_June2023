@@ -6,6 +6,10 @@
 #define mapWidth 24
 #define mapHeight 24
 
+typedef struct RaycastHit {
+	float hitX, hitY;
+	byte colour;
+} RaycastHit;
 
 typedef struct Camera {
 	float x, y;
@@ -44,6 +48,74 @@ byte worldMap[mapWidth][mapHeight] =
   {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,4,0,0,0,4,0,0,0,1},
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
+
+void raycaster_cast(){
+	for ( int x = SCREEN_WIDTH/2; x <= SCREEN_WIDTH/2; ++x ){
+		int x = SCREEN_WIDTH/2;
+		float cameraX = 2 * x / (float)SCREEN_WIDTH - 1;
+		float rayDirX = camera.dirX + camera.planeX * cameraX;
+		float rayDirY = camera.dirY + camera.planeY * cameraX;
+		int mapX = (int)camera.x;
+		int mapY = (int)camera.y;
+		float sideDistX, sideDistY;
+		float deltaDistX = rayDirX ? fabs( 1 / rayDirX ) : INFINITY;
+		float deltaDistY = rayDirY ? fabs( 1 / rayDirY ) : INFINITY;
+		float perpWallDist;
+
+		int stepX, stepY;
+		int hit = 0;
+		int side = 0;
+
+		if ( rayDirX < 0 ){
+			stepX = -1;
+			sideDistX = ( camera.x -  mapX ) * deltaDistX;
+		} else {
+			stepX = 1;
+			sideDistX = ( mapX + 1.0 - camera.x ) * deltaDistX;
+		}
+		if ( rayDirY < 0 ){
+			stepY = -1;
+			sideDistY =  ( camera.y - mapY ) * deltaDistY;
+		} else {
+			stepY = 1;
+			sideDistY =  ( mapY + 1.0 - camera.y ) * deltaDistY;
+		}
+
+		//Perform DDA
+		while ( !hit ){
+			//Jump to next square
+			if ( sideDistX < sideDistY ){
+				sideDistX += deltaDistX;
+				mapX += stepX;
+				side = 0;
+			} else {
+				sideDistY += deltaDistY;
+				mapY += stepY;
+				side = 1;
+			}
+			if ( mapX < 0 || mapX >= mapWidth || mapY < 0 || mapY >= mapHeight ){
+				hit = 1;
+			} else if ( worldMap[mapX][mapY] ) {
+				hit = 1;
+			}
+		}
+		if ( side == 0 ) perpWallDist = ( sideDistX - deltaDistX );
+		else perpWallDist = ( sideDistY - deltaDistY );
+
+		//Draw debug line
+		float endX, endY;
+		endX = camera.dirX * perpWallDist + camera.x;
+		endY = camera.dirY * perpWallDist + camera.y;
+		gfx_line( 
+			camera.x * raycaster_topdown_scale, 
+			camera.y * raycaster_topdown_scale,
+			endX * raycaster_topdown_scale, 
+			endY * raycaster_topdown_scale, 
+			14 
+		);	
+	}
+
+}
 
 void raycaster_init(){
 	camera.x = 22;
@@ -101,7 +173,7 @@ void raycaster_draw_camera_topdown(){
 void raycaster_draw_topdown(){
 	raycaster_draw_map_topdown();
 	raycaster_draw_camera_topdown();	
-
+	raycaster_cast();
 }
 
 void raycaster_update(){
