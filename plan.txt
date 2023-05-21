@@ -11,7 +11,7 @@ Raycaster FPS
 
 001 Raycaster third person top down
 [*] 000 Lines on screen
-[ ] 001 Movable, rotatable camera cursor
+[*] 001 Movable, rotatable camera cursor
 [ ] 002 Test map data
 [ ] 003 Render map as lines
 [ ] 004 Cast a single ray

@@ -20,6 +20,9 @@
 #define KEYCODE_LEFT 		75
 #define KEYCODE_RIGHT 		77
 #define KEYCODE_DOWN 		80
+#define KEYCODE_Q		16
+#define KEYCODE_E 		18
+
 
 //Keyboard handler
 _go32_dpmi_seginfo old_isr, keyboard_isr;
@@ -80,16 +83,20 @@ void input_init(){
 //Update an individual input 
 void input_update_input( INPUTS input, byte isActive ){
 	int value = inputs[input];
+	//Increment active inputs or set them to deactivating
 	if ( value >= INPUT_ACTIVE ){
 		inputs[input] = isActive ? value + 1 : INPUT_DEACTIVATING;
-	} else {
+	} else { //Set a newly active input to active or leave inactive input as inactive
 		inputs[input] = isActive ? INPUT_ACTIVE : INPUT_INACTIVE;
 	}
 }
 
+//Update the inputs array
 void input_update(){
 	input_update_input( input_forward, input_keyboard_state[KEYCODE_W] | input_keyboard_state[KEYCODE_UP] );
 	input_update_input( input_backward, input_keyboard_state[KEYCODE_S] | input_keyboard_state[KEYCODE_DOWN] );
 	input_update_input( input_left, input_keyboard_state[KEYCODE_A] | input_keyboard_state[KEYCODE_LEFT] );
 	input_update_input( input_right, input_keyboard_state[KEYCODE_D] | input_keyboard_state[KEYCODE_RIGHT] );
+	input_update_input( input_rotate_left, input_keyboard_state[KEYCODE_Q] );
+	input_update_input( input_rotate_right, input_keyboard_state[KEYCODE_E] );
 }

@@ -18,7 +18,7 @@ void gfx_line( uint x1, uint y1, uint x2, uint y2, byte colour ){
 
 	uint x = x1;
 	uint y = y1;
-	screen[y*SCREEN_WIDTH+x] = colour;
+	screen[(y*SCREEN_WIDTH+x)%SCREEN_LENGTH] = colour;
 
 	//Slope < 1
 	if ( absdx > absdy ){
@@ -31,7 +31,7 @@ void gfx_line( uint x1, uint y1, uint x2, uint y2, byte colour ){
 				y += ystep;
 				d += 2*absdy - 2*absdx;
 			}
-			screen[y*SCREEN_WIDTH+x] = colour;
+			screen[(y*SCREEN_WIDTH+x)%SCREEN_LENGTH] = colour;
 		}
 	//Slope >= 1
 	} else { 
@@ -44,7 +44,7 @@ void gfx_line( uint x1, uint y1, uint x2, uint y2, byte colour ){
 				x += xstep;
 				d += 2*absdx - 2*absdy;
 			}
-			screen[y*SCREEN_WIDTH+x] = colour;
+			screen[(y*SCREEN_WIDTH+x)%SCREEN_LENGTH] = colour;
 		}
 	}
 }

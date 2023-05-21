@@ -2,13 +2,16 @@
 #include "gfx.h"
 #include "input.h"
 #include <bios.h>
+#include <math.h>
 #define mapWidth 24
 #define mapHeight 24
+
 
 typedef struct Camera {
 	float x, y;
 	float dirX, dirY;
 	float planeX, planeY;
+	float rotation;
 } Camera;
 
 Camera camera;
@@ -48,7 +51,14 @@ void raycaster_init(){
 	camera.dirX = -1;
 	camera.dirY = 0;
 	camera.planeX = 0;
-	camera.planeY = 0.66;
+	camera.planeY = 1;
+}
+
+void raycaster_calculate_camera(){
+	camera.dirX = cos( camera.rotation );
+	camera.dirY = sin( camera.rotation );
+	camera.planeX = cos( camera.rotation + M_PI_2 );
+	camera.planeY = sin( camera.rotation + M_PI_2 );
 }
 
 void raycaster_draw_camera_topdown(){
@@ -78,8 +88,33 @@ void raycaster_draw_topdown(){
 }
 
 void raycaster_update(){
+
+	float walk_speed = 0.5;
+	float rotation_speed = 0.05;
+
+	raycaster_calculate_camera();
 	//Read input and update camera position	
-	if ( inputs[input_forward] == 1 ){
-		camera.x += 1;
-	}	
+	if ( inputs[input_forward] ){
+		camera.x += camera.dirX * walk_speed;
+		camera.y += camera.dirY * walk_speed;
+	} 
+	if ( inputs[input_backward] ){
+		camera.x -= camera.dirX * walk_speed;
+		camera.y -= camera.dirY * walk_speed;
+	}
+	if ( inputs[input_left] ){
+		camera.x -= camera.planeX * walk_speed;
+		camera.y -= camera.planeY * walk_speed;
+	}
+	if ( inputs[input_right] ){
+		camera.x += camera.planeX * walk_speed;
+		camera.y += camera.planeY * walk_speed;
+	}
+	if ( inputs[input_rotate_left] ){
+		camera.rotation -= rotation_speed;
+	} 
+	if ( inputs[input_rotate_right] ){
+		camera.rotation += rotation_speed;
+	}
+
 }

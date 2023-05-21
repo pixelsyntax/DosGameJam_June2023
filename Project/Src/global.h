@@ -4,6 +4,7 @@
 #define CHAR_BIT 8
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 200
+#define SCREEN_LENGTH ( SCREEN_WIDTH * SCREEN_HEIGHT )
 #define LOCK_VARIABLE(x)    _go32_dpmi_lock_data((void *)&x,(long)sizeof(x));
 #define LOCK_FUNCTION(x)    _go32_dpmi_lock_code(x,(long)sizeof(x));
 
