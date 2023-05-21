@@ -21,11 +21,11 @@ typedef struct Camera {
 Camera camera;
 float raycaster_topdown_scale = 8;
 
-byte worldMap[mapWidth][mapHeight] =
+byte worldMap[mapHeight][mapWidth] =
 {
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,3,3,3,3,0,0,0,1},
   {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
@@ -95,7 +95,7 @@ void raycaster_cast(){
 			}
 			if ( mapX < 0 || mapX >= mapWidth || mapY < 0 || mapY >= mapHeight ){
 				hit = 1;
-			} else if ( worldMap[mapX][mapY] ) {
+			} else if ( worldMap[mapY][mapX] ) {
 				hit = 1;
 			}
 		}
@@ -141,8 +141,8 @@ void raycaster_draw_map_topdown(){
 				gfx_rect(
 					tx*raycaster_topdown_scale,
 					ty*raycaster_topdown_scale,
-					raycaster_topdown_scale,
-					raycaster_topdown_scale,
+					raycaster_topdown_scale-1,
+					raycaster_topdown_scale-1,
 					colour
 				);
 			}	
