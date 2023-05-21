@@ -8,6 +8,8 @@
 #include <string.h>
 #include "global.h"
 #include "gfx.h"
+#include "raycaster.h"
+#include "input.h"
 
 #define BIOS_GFX_VIDEOMODE 0x00
 #define BIOS_GFX_INT 0x10
@@ -43,6 +45,7 @@ void set_graphics_mode( char mode ){
 }
 
 int main(){
+	input_init();
 	//Cool people don't need memory protection B-)
 	__djgpp_nearptr_enable();
 
@@ -54,13 +57,24 @@ int main(){
 	//Go VGA mode 0x13, yeah!
 	set_graphics_mode( VIDEOMODE_VGA256 );
 
+	raycaster_init();
+	//input_init();
+
 	int i = 0;
 	int x, y;
 	while( 1 ){
 		//Wait for vsync and draw previous frame to screen
 		vsync();
 		blit_screen_to_video();
+		gfx_clear();
+
+		//Input polling
+		input_update();
+		//Logic updates
+		raycaster_update();
+	
 		//Draw the next frame
+		raycaster_draw_topdown();		
 	}
 
 	//Return to boredom :(
