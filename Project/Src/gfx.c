@@ -5,6 +5,15 @@ void gfx_clear(){
 	memset( screen, 0, SCREEN_WIDTH*SCREEN_HEIGHT );
 }
 
+void gfx_rect( uint x, uint y, uint w, uint h, byte colour ){
+	
+	gfx_line( x, y, x+w, y, colour );
+	gfx_line( x+w, y, x+w, y+h, colour );
+	gfx_line( x+w, y+h, x, y+h, colour );
+	gfx_line( x, y+h, x, y, colour );
+
+}
+
 void gfx_line( uint x1, uint y1, uint x2, uint y2, byte colour ){
 
 	const int dx = x2 - x1;
