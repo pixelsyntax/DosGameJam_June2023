@@ -50,9 +50,8 @@ byte worldMap[mapHeight][mapWidth] =
 };
 
 void raycaster_cast(){
-	for ( int x = SCREEN_WIDTH/2; x <= SCREEN_WIDTH/2; ++x ){
-		int x = SCREEN_WIDTH/2;
-		float cameraX = 2 * x / (float)SCREEN_WIDTH - 1;
+	for ( int x = 0; x <= SCREEN_WIDTH; x += SCREEN_WIDTH/2 ){
+		float cameraX = 2 * ( x / (float)SCREEN_WIDTH ) - 1;
 		float rayDirX = camera.dirX + camera.planeX * cameraX;
 		float rayDirY = camera.dirY + camera.planeY * cameraX;
 		int mapX = (int)camera.x;
@@ -104,8 +103,8 @@ void raycaster_cast(){
 
 		//Draw debug line
 		float endX, endY;
-		endX = camera.dirX * perpWallDist + camera.x;
-		endY = camera.dirY * perpWallDist + camera.y;
+		endX = rayDirX * perpWallDist + camera.x;
+		endY = rayDirY * perpWallDist + camera.y;
 		gfx_line( 
 			camera.x * raycaster_topdown_scale, 
 			camera.y * raycaster_topdown_scale,

@@ -17,7 +17,7 @@ Raycaster FPS
 [*] 004 Cast a single ray
 [*] 005 Camera plane line
 [*] 006 Cast ray along camera plane normal
-[ ] 007 Cast rays to define field of view
+[*] 007 Cast rays to define field of view
 
 002 Raycaster first person
 [ ] 000 Cast SCREEN_WIDTH rays
