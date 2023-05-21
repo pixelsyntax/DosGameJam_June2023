@@ -12,7 +12,7 @@ dos_resources: dirs
 	cp Resources/CWSDPMI.EXE Bin/DOS/
 
 dos: dirs dos_resources
-	$(DJGPP_GCC) Src/*.c -o Bin/DOS/$(PROJECT).EXE
+	$(DJGPP_GCC) Src/*.c -o Bin/DOS/$(PROJECT).EXE -lm
 
 dos_test: dos
 	$(DOSBOX) Bin/DOS/DIVER.EXE
