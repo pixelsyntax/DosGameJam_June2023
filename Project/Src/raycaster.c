@@ -191,7 +191,7 @@ void raycaster_draw_camera_topdown( Player* player ){
 	);	
 }
 
-void raycaster_draw_topdown( Player *player){
+void raycaster_draw_topdown( Player *player ){
 	raycaster_draw_map_topdown();
 	raycaster_draw_camera_topdown( player );	
 	raycaster_cast_topdown( player );

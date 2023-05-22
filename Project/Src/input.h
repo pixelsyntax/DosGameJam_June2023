@@ -21,4 +21,9 @@ extern int inputs[input_count];
 void input_init();   //Initial setup
 void input_update(); //Poll inputs
 
+#ifndef MSDOS
+#include "SDL2/SDL.h"
+void input_sdl_event( SDL_Event* event ); 
+#endif
+
 #endif

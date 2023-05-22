@@ -1,5 +1,7 @@
 #include "input.h"
+#include <stdio.h>
 #include "global.h"
+#ifdef MSDOS
 #include <dos.h>
 #include <bios.h>
 #include <dpmi.h>
@@ -7,11 +9,9 @@
 #define BIOS_KEYBOARD_SERVICES 	0x16
 #define BIOS_KEYBOARD_STATUS 	0x02
 #define KEYBOARD_VECTOR 	0x09
-
 #define PORT_KEYBOARD_BUFFER 	0x60
 #define PORT_KEYBOARD_CONTROL	0x61
 #define PORT_PIC 		0x20
-
 #define KEYCODE_W 		17
 #define KEYCODE_A 		30
 #define KEYCODE_S 		31
@@ -22,20 +22,31 @@
 #define KEYCODE_DOWN 		80
 #define KEYCODE_Q		16
 #define KEYCODE_E 		18
-
-
-//Keyboard handler
+#else
+#define KEYCODE_W 		SDL_SCANCODE_W
+#define KEYCODE_A 		SDL_SCANCODE_A
+#define KEYCODE_S 		SDL_SCANCODE_S
+#define KEYCODE_D 		SDL_SCANCODE_D
+#define KEYCODE_UP 		SDL_SCANCODE_UP
+#define KEYCODE_LEFT 		SDL_SCANCODE_LEFT
+#define KEYCODE_RIGHT 		SDL_SCANCODE_RIGHT
+#define KEYCODE_DOWN 		SDL_SCANCODE_DOWN
+#define KEYCODE_Q		SDL_SCANCODE_Q
+#define KEYCODE_E 		SDL_SCANCODE_E
+#endif
+#ifdef MSDOS
+//DOS Keyboard handler
 _go32_dpmi_seginfo old_isr, keyboard_isr;
+#endif
 
 byte input_keyboard_state[128];
-int input_last_code;
 
 int inputs[input_count];
 
+#ifdef MSDOS
 void input_keyboard_isr(){
 	//Get key event
 	int scancode = inportb( PORT_KEYBOARD_BUFFER );
-	input_last_code = scancode;
 	scancode &= 0b0000000011111111;
 	
 	if ( scancode < 128 )
@@ -72,9 +83,12 @@ void input_uninstall_keyboard(){
 		&old_isr
 	);
 }
+#endif
 
 void input_init(){
+#ifdef MSDOS
 	input_install_keyboard();
+#endif
 	for ( int i = 0; i < input_count; ++i ){
 		inputs[i] = INPUT_INACTIVE;
 	}
@@ -100,3 +114,22 @@ void input_update(){
 	input_update_input( input_rotate_left, input_keyboard_state[KEYCODE_Q] );
 	input_update_input( input_rotate_right, input_keyboard_state[KEYCODE_E] );
 }
+
+#ifndef MSDOS
+void input_sdl_event( SDL_Event *event ){
+	int scancode;
+	switch( event->type ){
+		case SDL_KEYDOWN:
+			scancode = event->key.keysym.scancode;
+			if ( scancode < 128 )
+				input_keyboard_state[scancode] = 1;		
+			break;
+
+		case SDL_KEYUP:
+			scancode = event->key.keysym.scancode;
+			if ( scancode < 128 )
+				input_keyboard_state[scancode] = 0;		
+			break;
+	}
+}
+#endif
