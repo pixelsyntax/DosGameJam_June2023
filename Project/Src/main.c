@@ -74,7 +74,8 @@ int main(){
 		raycaster_update();
 	
 		//Draw the next frame
-		raycaster_draw_topdown();		
+		//raycaster_draw_topdown();		
+		raycaster_draw_firstperson();
 	}
 
 	//Return to boredom :(

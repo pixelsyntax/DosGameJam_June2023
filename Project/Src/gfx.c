@@ -14,6 +14,19 @@ void gfx_rect( uint x, uint y, uint w, uint h, byte colour ){
 
 }
 
+//Draw a line downward from x,y for height h
+void gfx_vline( uint x, uint y, uint h, const byte colour ){
+
+	if ( x < 0 || x >= SCREEN_WIDTH ) return;
+	if ( y < 0 ) y = 0;
+	if ( y + h >= SCREEN_HEIGHT ) h = SCREEN_HEIGHT - y;
+	uint i = y*SCREEN_WIDTH+x;
+	for ( int t = 0; t < h; ++t ){
+		screen[i] = colour;
+		i += SCREEN_WIDTH;
+	}
+}
+
 void gfx_line( uint x1, uint y1, uint x2, uint y2, byte colour ){
 
 	const int dx = x2 - x1;

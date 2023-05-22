@@ -50,6 +50,76 @@ byte worldMap[mapHeight][mapWidth] =
 };
 
 void raycaster_cast(){
+	float cameraX = -1;
+	float cameraXStep = 2 / (float)SCREEN_WIDTH;
+	
+	for ( int x = 0; x <= SCREEN_WIDTH; x += 1 ){
+		float rayDirX = camera.dirX + camera.planeX * cameraX;
+		float rayDirY = camera.dirY + camera.planeY * cameraX;
+		int mapX = (int)camera.x;
+		int mapY = (int)camera.y;
+		float sideDistX, sideDistY;
+		float deltaDistX = rayDirX ? fabs( 1 / rayDirX ) : INFINITY;
+		float deltaDistY = rayDirY ? fabs( 1 / rayDirY ) : INFINITY;
+		float perpWallDist;
+
+		int stepX, stepY;
+		int hit = 0;
+		int side = 0;
+
+		if ( rayDirX < 0 ){
+			stepX = -1;
+			sideDistX = ( camera.x -  mapX ) * deltaDistX;
+		} else {
+			stepX = 1;
+			sideDistX = ( mapX + 1.0 - camera.x ) * deltaDistX;
+		}
+		if ( rayDirY < 0 ){
+			stepY = -1;
+			sideDistY =  ( camera.y - mapY ) * deltaDistY;
+		} else {
+			stepY = 1;
+			sideDistY =  ( mapY + 1.0 - camera.y ) * deltaDistY;
+		}
+
+		//Perform DDA
+		while ( !hit ){
+			//Jump to next square
+			if ( sideDistX < sideDistY ){
+				sideDistX += deltaDistX;
+				mapX += stepX;
+				side = 0;
+			} else {
+				sideDistY += deltaDistY;
+				mapY += stepY;
+				side = 1;
+			}
+			if ( mapX < 0 || mapX >= mapWidth || mapY < 0 || mapY >= mapHeight ){
+				hit = 1;
+			} else if ( worldMap[mapY][mapX] ) {
+				hit = worldMap[mapY][mapX];
+			}
+		}
+		if ( side == 0 ) perpWallDist = ( sideDistX - deltaDistX );
+		else perpWallDist = ( sideDistY - deltaDistY );
+
+		int lineHeight = (int)(SCREEN_HEIGHT/perpWallDist);
+		int lineStart = -lineHeight / 2  + SCREEN_HEIGHT/2;
+		int lineEnd = lineStart + lineHeight;
+		if ( lineStart < 0 ) lineStart = 0;
+		if ( lineEnd >= SCREEN_HEIGHT )  lineEnd = SCREEN_HEIGHT - 1;
+
+		//Draw
+		gfx_vline( x, 0, lineStart, 0 ); //Ceiling
+		gfx_vline( x, lineStart, lineEnd-lineStart, hit );
+		gfx_vline( x, lineEnd, SCREEN_HEIGHT-1, 0 ); //Floor
+
+		//Prepare for next cast
+		cameraX += cameraXStep;
+	}
+
+}
+void raycaster_cast_topdown(){
 	for ( int x = 0; x <= SCREEN_WIDTH; x += SCREEN_WIDTH/2 ){
 		float cameraX = 2 * ( x / (float)SCREEN_WIDTH ) - 1;
 		float rayDirX = camera.dirX + camera.planeX * cameraX;
@@ -172,6 +242,10 @@ void raycaster_draw_camera_topdown(){
 void raycaster_draw_topdown(){
 	raycaster_draw_map_topdown();
 	raycaster_draw_camera_topdown();	
+	raycaster_cast_topdown();
+}
+
+void raycaster_draw_firstperson(){
 	raycaster_cast();
 }
 

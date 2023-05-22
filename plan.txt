@@ -20,9 +20,9 @@ Raycaster FPS
 [*] 007 Cast rays to define field of view
 
 002 Raycaster first person
-[ ] 000 Cast SCREEN_WIDTH rays
-[ ] 001 Draw pixel columns (ceiling, wall, floor)
-[ ] 002 Untextured raycaster
+[*] 000 Cast SCREEN_WIDTH rays
+[*] 001 Draw pixel columns (ceiling, wall, floor)
+[*] 002 Untextured raycaster
 [ ] 003 Collisions to prevent walking through walls
 
 Ideas
