@@ -9,6 +9,7 @@
 #include "global.h"
 #include "gfx.h"
 #include "raycaster.h"
+#include "player.h"
 #include "input.h"
 
 #define BIOS_GFX_VIDEOMODE 0x00
@@ -58,7 +59,7 @@ int main(){
 	set_graphics_mode( VIDEOMODE_VGA256 );
 
 	raycaster_init();
-	//input_init();
+	player_init();
 
 	int i = 0;
 	int x, y;
@@ -66,16 +67,17 @@ int main(){
 		//Wait for vsync and draw previous frame to screen
 		vsync();
 		blit_screen_to_video();
-		gfx_clear();
+		//gfx_clear();
 
 		//Input polling
 		input_update();
 		//Logic updates
+		player_update( &player1 );
 		raycaster_update();
 	
 		//Draw the next frame
 		//raycaster_draw_topdown();		
-		raycaster_draw_firstperson();
+		raycaster_draw_firstperson( &player1 );
 	}
 
 	//Return to boredom :(
