@@ -28,7 +28,7 @@ dos_resources: dirs
 	cp -r Assets Bin/DOS/ASSETS
 
 dos: dirs dos_resources
-	$(DJGPP_GCC) Src/*.c -o Bin/DOS/$(PROJECT).EXE -lm 
+	$(DJGPP_GCC) -O3 Src/*.c -o Bin/DOS/$(PROJECT).EXE -lm 
 
 dos_test: dos
 	$(DOSBOX) Bin/DOS/DIVER.EXE

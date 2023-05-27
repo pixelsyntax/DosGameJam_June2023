@@ -70,8 +70,9 @@ void texture_load_sheet( const char *path ){
 	for ( int py = 0; py < 512; ++py ){
 		for ( int px = 0; px < 512; ++px ){
 			int texture_index = ( py / 32 ) * 16 + ( px / 32 );
-			int dest_pixel_index = (py % TEXTURE_SIZE)*TEXTURE_SIZE + 
-						px % TEXTURE_SIZE;
+			//Stored Y,X
+			int dest_pixel_index = (px % TEXTURE_SIZE)*TEXTURE_SIZE + 
+						py % TEXTURE_SIZE;
 			int src_pixel_index = (512-py) * 512 + px; //BMP is bottom up
 			textures[texture_index].pixels[dest_pixel_index] = 
 				pixel_buffer[src_pixel_index];

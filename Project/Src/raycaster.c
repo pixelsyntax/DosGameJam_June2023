@@ -92,10 +92,12 @@ void raycaster_cast( Player *player ){
 		float texPos = ( lineStart - SCREEN_HEIGHT / 2 +
 				lineHeight / 2 ) * ystep;
 		int p = lineStart * SCREEN_WIDTH + x;
+		//texX * TEXTURE_SIZE is constant along entire strip
+		int texX_offset = texX * TEXTURE_SIZE; 
 		for ( int y = lineStart; y < lineEnd; ++y ){
 			int texY = (int)texPos & (TEXTURE_SIZE-1);
 			texPos += ystep;
-			screen[p] = textures[texture_index].pixels[texY * TEXTURE_SIZE+texX];
+			screen[p] = textures[texture_index].pixels[texY + texX_offset];
 			p += SCREEN_WIDTH;
 		}
 

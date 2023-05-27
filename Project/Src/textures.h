@@ -6,7 +6,7 @@
 #define TEXTURE_SIZE 32
 #define TEXTURE_COUNT 256 
 typedef struct Texture {
-	byte pixels[TEXTURE_SIZE*TEXTURE_SIZE];
+	byte pixels[TEXTURE_SIZE*TEXTURE_SIZE]; //Stored Y,X for vertical strip performance
 } Texture;
 
 extern Texture textures[TEXTURE_COUNT];
