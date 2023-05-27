@@ -28,9 +28,9 @@ Raycaster FPS
 [*] 005 Test textures in ram
 [*] 006 Palette in ram
 [*] 007 Textured raycaster 
-[ ] 008 Transparent wall support
-[ ] 009 Sprites
-[ ] 010 Backdrop
+[ ] 008 Thin wall support
+[ ] 009 Transparent thin wall support
+[ ] 010 Sprites
 
 
 Ideas
