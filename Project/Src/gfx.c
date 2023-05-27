@@ -1,5 +1,16 @@
 #include <string.h>
 #include "gfx.h"
+#ifdef MSDOS
+#include <dos.h>
+#include <bios.h>
+#include <dpmi.h>
+#include <go32.h>
+
+#define PORT_PALETTE_MASK  0x03C6
+#define PORT_PALETTE_WRITE 0x03C8
+#define PORT_PALETTE_DATA  0x03C9
+
+#endif
 
 void gfx_clear(){
 	memset( screen, 0, SCREEN_WIDTH*SCREEN_HEIGHT );
@@ -69,4 +80,20 @@ void gfx_line( uint x1, uint y1, uint x2, uint y2, byte colour ){
 			screen[(y*SCREEN_WIDTH+x)%SCREEN_LENGTH] = colour;
 		}
 	}
+}
+
+//Set 256 colours in the palette
+void gfx_set_indexed_palette( Colour *colours ){
+#ifdef MSDOS
+	Colour *colour;
+	for ( int i = 0; i <= 256; ++i ){
+		colour = &colours[i]; 
+		outportb( PORT_PALETTE_MASK, 0xFF );
+		outportb( PORT_PALETTE_WRITE, (byte)i );		
+		outportb( PORT_PALETTE_DATA, colour->r >> 2 );
+		outportb( PORT_PALETTE_DATA, colour->g >> 2 );
+		outportb( PORT_PALETTE_DATA, colour->b >> 2 );
+	}
+	
+#endif
 }

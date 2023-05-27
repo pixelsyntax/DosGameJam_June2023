@@ -11,6 +11,9 @@
 typedef unsigned char byte;
 typedef unsigned int uint;
 
+typedef struct Colour {
+	byte b,g,r,a;
+} Colour;
 
 extern byte* screen;
 

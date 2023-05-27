@@ -6,6 +6,7 @@
 #include "raycaster.h"
 #include "player.h"
 #include "input.h"
+#include "textures.h"
 
 #ifdef linux
 #include "SDL2/SDL.h"
@@ -25,12 +26,14 @@
 #define VGA_INPUT_STATUS_1 0x3DA
 #define VGA_VSYNC_MASK 0x08
 byte* vga; //actual video ram
+#define ASSET_DIR "ASSETS\\"
 #else
 SDL_Window *window = NULL;
 SDL_Renderer *renderer;
 SDL_Event event;
 SDL_Surface *screen_surface; //Our virtual screen
 SDL_Surface *window_surface; //The OS window surface for final output
+#define ASSET_DIR "Assets/"
 #endif
 
 
@@ -166,6 +169,8 @@ int main(){
 
 	raycaster_init();
 	player_init();
+
+	texture_load_sheet( ASSET_DIR "tiles.bmp" );
 
 	int i = 0;
 	int x, y;

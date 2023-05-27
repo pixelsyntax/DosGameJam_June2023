@@ -25,8 +25,8 @@ Raycaster FPS
 [*] 002 Untextured raycaster
 [*] 003 Collisions to prevent walking through walls
 [*] 004 Test textures
-[ ] 005 Test textures in ram
-[ ] 006 Palette in ram
+[*] 005 Test textures in ram
+[*] 006 Palette in ram
 [ ] 007 Textured raycaster 
 [ ] 008 Transparent wall support
 [ ] 009 Sprites
