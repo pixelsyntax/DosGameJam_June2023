@@ -4,6 +4,7 @@
 #include "input.h"
 #include "world.h"
 #include "player.h"
+#include "textures.h"
 
 typedef struct RaycastHit {
 	float hitX, hitY;
@@ -73,9 +74,34 @@ void raycaster_cast( Player *player ){
 		if ( lineStart < 0 ) lineStart = 0;
 		if ( lineEnd >= SCREEN_HEIGHT )  lineEnd = SCREEN_HEIGHT - 1;
 
-		//Draw
+		int texture_index = hit;
+		float wallX;
+		if ( side == 0 ){
+			wallX = player->y + perpWallDist * rayDirY;
+		} else {
+			wallX = player->x + perpWallDist * rayDirX;
+		}
+		//X position in the texture
+		wallX -= (int)wallX;
+		int texX = wallX * TEXTURE_SIZE;
+		if ( side == 0 && rayDirX > 0 ) texX = TEXTURE_SIZE - texX - 1;
+		if ( side == 1 && rayDirY < 0 ) texX = TEXTURE_SIZE - texX - 1;
+
+		//Draw a texture stripe
+		float ystep = 1.0 * TEXTURE_SIZE / lineHeight;
+		float texPos = ( lineStart - SCREEN_HEIGHT / 2 +
+				lineHeight / 2 ) * ystep;
+		int p = lineStart * SCREEN_WIDTH + x;
+		for ( int y = lineStart; y < lineEnd; ++y ){
+			int texY = (int)texPos & (TEXTURE_SIZE-1);
+			texPos += ystep;
+			screen[p] = textures[texture_index].pixels[texY * TEXTURE_SIZE+texX];
+			p += SCREEN_WIDTH;
+		}
+
+		//Draw solid colour
 		gfx_vline( x, 0, lineStart, 0 ); //Ceiling
-		gfx_vline( x, lineStart, lineEnd-lineStart, hit );
+		//gfx_vline( x, lineStart, lineEnd-lineStart, hit );
 		gfx_vline( x, lineEnd, SCREEN_HEIGHT-1, 0 ); //Floor
 
 		//Prepare for next cast
