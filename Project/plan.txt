@@ -24,7 +24,7 @@ Raycaster FPS
 [*] 001 Draw pixel columns (ceiling, wall, floor)
 [*] 002 Untextured raycaster
 [*] 003 Collisions to prevent walking through walls
-[ ] 004 Test textures
+[*] 004 Test textures
 [ ] 005 Test textures in ram
 [ ] 006 Palette in ram
 [ ] 007 Textured raycaster 
